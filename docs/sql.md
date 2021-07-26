@@ -39,9 +39,9 @@ AVG是一个求平均值的内置函数,
 
 当遍历到某一行时, 把这一行的雇员的工资就是 e.salary
 
-然后我们的条件是工资大于办公室的平均工资, 那么我们要查雇员所有办公室的平均工资.
+然后我们的条件是工资大于办公室的平均工资, 那么我们要查雇员所在办公室的平均工资.
 
-然后, 我们通过 e.office_id 得到这个雇员的办公室, 以止作为条件来查询这个雇员的办公室的平均工资:
+然后, 我们通过 `e.office_id` 得到这个雇员的办公室, 进而查询该雇员办公室的平均工资
 
 ```sql
 select avg(d.salary)
@@ -55,10 +55,9 @@ where d.office_id = e.office_id
 `select avg(salary) from employees where office_id = 10`
 
 
-不过这是一个嵌套查询, e.office_id 虽然在某次子查询中是固定的, 但在上一次子查询和下一次子查询中可能是变动的, 所以, 子查询中仍然应该用 e.office_id 来表示.
+不过这是一个嵌套查询, e.office_id 虽然在某次子查询中是固定的, 但在不同的子查询间可能是变动的, 所以, 子查询中仍然应该用表达式 `e.office_id` 来引用当前雇员所在的办公室.
 
-
-所以, 完整的where表达式应该是下面这样:
+再把10替换成 `e.office_id` , 完整的where表达式应该是下面这样:
 ```
 e.salary > (
 select avg(d.salary)
@@ -66,4 +65,6 @@ from employees d
 where d.office_id = e.office_id
 )
 ```
+
+也就是, 一开始时原sql的模样.
 
